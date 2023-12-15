@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
-import { BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import SearchHN from "./components/searchbar";
+import PostDetails from "./components/postdetail";
 
 const App = () => {
   const [query, setQuery] = useState("");
@@ -13,87 +15,63 @@ const App = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-       const response = await axios.get(
-         `http://hn.algolia.com/api/v1/search?query=${query}`
-       );
-       setSearchResults(response.data.hits);
+      const response = await axios.get(
+        `http://hn.algolia.com/api/v1/search?query=${query}`
+      );
+      setSearchResults(response.data.hits);
     } catch (error) {
-       console.error(error);
+      console.error(error);
     } finally {
-       setIsLoading(false);
+      setIsLoading(false);
     }
-   };
-   
-   const handlePostDetails = async (objectID) => {
+  };
+
+  const handlePostDetails = async (objectID) => {
     setIsLoading(true);
     try {
-       const response = await axios.get(
-         `http://hn.algolia.com/api/v1/items/${objectID}`
-       );
-       setPostDetails(response.data);
+      const response = await axios.get(
+        `http://hn.algolia.com/api/v1/items/${objectID}`
+      );
+      setPostDetails(response.data);
     } catch (error) {
-       console.error(error);
+      console.error(error);
     } finally {
-       setIsLoading(false);
+      setIsLoading(false);
     }
-   };
-   
-   useEffect(() => {
+  };
+
+  useEffect(() => {
     if (searchResults.length > 0) {
-       handlePostDetails(searchResults[0].objectID);
+      handlePostDetails(searchResults[0].objectID);
     }
-   }, [searchResults]);
+  }, [searchResults]);
 
   return (
     <Router>
       <div className="App">
-        
-        <Routes
-          exact
-          path="/"
-          render={() => (
-            <div>
-              <form onSubmit={handleSearch}>
-                <input
-                  type="text"
-                  className="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                <button type="submit">Search</button>
-              </form>
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : (
-                <ul className="box">
-                  {searchResults.map((result) => (
-                    <li
-                      key={result.objectID}
-                      onClick={() => handlePostDetails(result.objectID)}
-                    >
-                      {result.title}
-                    </li>
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={<SearchHN/>}
+          />
+          <Route path="/srikanth/:id" element={<PostDetails/>} />
+          <Route
+            path="/post/:objectID"
+            element={() => (
+              <div>
+                <button>Back to search</button>
+                <h1>{postDetails.title}</h1>
+                <p>Points: {postDetails.points}</p>
+                <ul>
+                  {postDetails.children.map((comment) => (
+                    <li key={comment.id}>{comment.text}</li>
                   ))}
                 </ul>
-              )}
-            </div>
-          )}
-        />
-        <Routes
-          path="/post/:objectID"
-          render={() => (
-            <div>
-              <button >Back to search</button>
-              <h1>{postDetails.title}</h1>
-              <p>Points: {postDetails.points}</p>
-              <ul>
-                {postDetails.children.map((comment) => (
-                  <li key={comment.id}>{comment.text}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        />
+              </div>
+            )}
+          />
+        </Routes>
       </div>
     </Router>
   );

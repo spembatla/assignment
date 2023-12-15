@@ -1,37 +1,4 @@
-
-
-.box{
-    width: 550px;
-    background-color: white;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-    list-style-type:circle;
+.search {
+  width: 30%;
+  margin: 0 auto;
 }
-
-a{
-    text-decoration: none;
-}
-
-
-input{
-    width: 550px;
-    height: 30px;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-    
-}
-
-button{
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-}
-
-.search{
-    display: flex;
-    flex-direction: column;
-    
-}
-
-
