@@ -1,0 +1,27 @@
+.App{
+  display: flex;
+  justify-content: center;
+}
+
+.search{
+  width: 550px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+ 
+}
+
+.box{
+  width: 550px;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  outline: none;
+}
+
+button{
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+}
+
