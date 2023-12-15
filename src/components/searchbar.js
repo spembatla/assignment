@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useState, useEffect } from "react";
-import {Autocomplete, Input, InputAdornment} from '@mui/material';
+import { Autocomplete, Input, InputAdornment } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
 import "./search.css";
@@ -19,7 +19,7 @@ const SearchHN = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   const search = async () => {
     const data = await searchHN(query);
     setResults(data);
@@ -30,16 +30,21 @@ const SearchHN = () => {
   }, []);
 
   useEffect(() => {
-    if (query) {
+    if(query){
       search();
     }
   }, [query, search]);
 
+
+
   const handleSearch = (e) => {
     const value = e.target.value;
-
     setQuery(value);
   }
+
+
+
+
 
   return (
     <div className="search">
@@ -47,16 +52,17 @@ const SearchHN = () => {
         id="search-id"
         freeSolo
         options={top100Films.map((option) => option.title)}
-        renderInput={(params) => <Input {...params} onChange={handleSearch} placeholder="Search" label="Search" startAdornment={<InputAdornment position="start">
-              <Search />
-            </InputAdornment>} />}
+        renderInput={(params) => <Input {...params} onChange={handleSearch} placeholder="Type here to Search" label="Search" startAdornment={<InputAdornment position="start">
+          <Search />
+        </InputAdornment>} />}
       />
 
-      <div className="items">
-      {results && results.map((result,index) => {
-        return <div className="item">{result.title}</div>
-      })}
-      </div>
+      <ul className="items">
+        {results && results.map((result, index) => {
+          return <li className="item" key={result.objectID} >
+            <a href={`/post/${result.objectID}`}>{result.title}</a></li>
+        })}
+      </ul>
     </div>
   );
 };
